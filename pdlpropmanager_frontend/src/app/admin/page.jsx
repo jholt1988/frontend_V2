@@ -1,9 +1,9 @@
 'use client";'
-import AdminDashboard from "@/features/AdminDashboard";
-import { useToast } from "@/lib/useToast";
+import AdminDashboard from "@/components/Admin/AdminDashboard";
+
 
 const AdminDashboardPage = () => {
-    const { success, error, warning, info } = useToast();
+
 
     return (
         <div className="max-w-3xl mx-auto p-4 bg-white rounded shadow">
