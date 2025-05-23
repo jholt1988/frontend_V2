@@ -2,7 +2,7 @@
 
 import { AuthProvider } from '@/context/AuthContext';
 import SidebarLayout from '@/components/SidebarLayout';
-import { ToastProvider } from '@/components/ui/Toast/ToastProvider';
+import {ToastProvider}  from '@/lib/useToast';
 import { Modal } from '@/components/ui/Modal/Modal';
 import "./globals.css";
 
@@ -12,9 +12,7 @@ import "./globals.css";
       <body>
         <AuthProvider>
           <ToastProvider>
-            <Modal>
             <SidebarLayout>{children}</SidebarLayout>
-           </Modal>
           </ToastProvider>
         </AuthProvider>
       </body>
@@ -24,14 +22,11 @@ import "./globals.css";
 
 function Layout({ children }) {
   return (
-    
-      <RootLayout>
-        {children}
-      </RootLayout>
-    
+    <RootLayout>
+      {children}
+    </RootLayout>
   );
 }
 
 
 export default Layout;
-  

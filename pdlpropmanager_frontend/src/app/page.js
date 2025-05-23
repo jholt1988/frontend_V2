@@ -29,7 +29,7 @@ export default function LandingPage() {
         <div className="flex justify-center gap-4 mb-5">
           <Link
             href="/login"
-            className="bg-[var(--accent)] text-white font-semibold px-5 py-2 rounded-lg hover:bg-[var(--accent-hover)] transition"
+            className="btnbg-[var(--accent)] text-white font-semibold px-5 py-2 rounded-lg hover:bg-[var(--accent-hover)] transition"
           >
             Login
           </Link>

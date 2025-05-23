@@ -3,16 +3,15 @@
 import { useState, useContext } from 'react';
 import AuthContext from '@/context/AuthContext';
 import { loginUser } from '@/services/authService';
-import { toast } from 'react-toastify';
-import Link from 'next/link';
+import {useToast} from '@/lib/useToast';
 import withGuest from '../lib/withGuest';
 
  function LoginPage() {
   const { login } = useContext(AuthContext);
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
-
+  const {success, error, warning, info} = useToast();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -21,14 +20,14 @@ import withGuest from '../lib/withGuest';
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setErrorMsg('');
     try {
       const { token } = await loginUser(formData);
       login(token); // stores token + user
-      toast.success("Login successful!");
+      success("Login successful!");
   
     } catch (error) {
-      toast.error(error.message || "Login failed");
+      error(errorMsg.message || "Login failed");
   }   finally {
       setLoading(false);
     }
