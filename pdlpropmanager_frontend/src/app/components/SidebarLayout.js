@@ -28,7 +28,7 @@ export default function SidebarLayout({ children }) {
   return (
     <>
       {/* Sidebar */}
-      <aside className={`w-64 bg-secondary p-4 transition-all duration-300 ${open ? 'block' : 'hidden'} md:block`}>
+      <aside className={`sidebar flex-row w-64 bg-secondary p-4 transition-all duration-300 ${open ? 'block' : 'hidden'} md:block`}>
         <h2 className="text-xl font-bold mb-6">PDL Rentals</h2>
         <nav className="space-y-2">
           <NavItem href="/" label="Home" />
@@ -101,7 +101,7 @@ export default function SidebarLayout({ children }) {
           </footer>
         </div>
       
-      );  
+       
     </>
   );
 }

@@ -1,30 +1,32 @@
 'use client';
 
 import { useEffect, useState, useContext, useRef} from 'react';
-import  AuthContext  from '@/context/AuthContext';
+
 import { getDashboardSummary } from '@/services/apiService';
 import { getDashboardStats } from '@/services/apiService';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import ExportControls from '@/components/ExportControls';
+import useRequireAuth from '@/lib/useRequireAuth';
 
 export default function AdminDashboard() {
-  const { user } = useContext(AuthContext);
+   const { user, loading } = useRequireAuth(['admin']);
   const [summary, setSummary] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(loading);
   const [stats, getStats] = useState(null)
   const chartRef = useRef();
+  console.log(user)
 
   useEffect(() => {
-    if (user?.role === 'admin' || user?.role === 'staff') {
+    if (user?.role === 'admin' || user?.role === 'staff' || user?.role === 'Admin') {
       getDashboardSummary()
         .then(setSummary)
         .catch((err) => console.error('Failed to fetch dashboard summary:', err))
-        .finally(() => setLoading(false));
+        .finally(() => setIsLoading(false));
 
         getDashboardStats()
         .then(getStats)
-        .catch((err) => console.error('Failed to fetch dashboard stats:', err)) 
-        .finally(() => setLoading(false));
+        .catch((err) => console.error('Failed to fetch dashboard stats:', err))
+        .finally(() => setIsLoading(false));
     }
   }, [user]);
 
@@ -32,7 +34,7 @@ export default function AdminDashboard() {
     return <p className="text-red-500">Unauthorized</p>;
   }
 
-  if (loading) return <p>Loading dashboard...</p>;
+  if (isLoading) return <p>Loading dashboard...</p>;
 
   return (
     <div className="max-w-6xl mx-auto bg-white p-6 rounded shadow">

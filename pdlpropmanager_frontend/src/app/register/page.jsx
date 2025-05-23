@@ -3,11 +3,14 @@
 import { useState, useContext } from 'react';
 import AuthContext from '@/context/AuthContext';
 import { registerUser } from '@/services/authService';
-import { toast } from 'react-toastify';
+
 import Link from 'next/link';
 import withGuest from '../lib/withGuest';
+import { useToast } from '@/lib/useToast';
  function RegisterPage() {
+  const {success, error, warning, info} = useToast();
   const { login } = useContext(AuthContext);
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -16,7 +19,7 @@ import withGuest from '../lib/withGuest';
     role: '', // default role
   });
 
-  const [error, setError] = useState('');
+  const [isError, setIsError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -27,13 +30,13 @@ import withGuest from '../lib/withGuest';
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setIsError('');
     try {
       const { token } = await registerUser(formData);
       login(token);
-      toast.success("Registration successful!") // auto-login after registration
-    } catch (error) {
-      toast.error(error.message || "Registration failed");
+      success("Registration successful!"); // auto-login after registration
+    } catch (isError) {
+      error(isError.message || "Registration failed");
   }  finally {
       setLoading(false);
     }
@@ -63,15 +66,16 @@ import withGuest from '../lib/withGuest';
                     </div>
                     <label htmlFor="role">Role:</label>
                     <select className='select' name="role" value={formData.role} onChange={ handleChange } required>
-                        <option value="Tenant">Tenant</option>
-                        <option value="Admin">Admin</option>
-                        <option value="Contractor">Contractor</option>
+                        <option value="tenant">Tenant</option>
+                        <option value="admin">Admin</option>
+                        <option value="contractor">Contractor</option>
+                        <option value="staff">Staff</option>
                     </select>
     
-                    <button className='btn' type="submit">Register</button>
+                    <button className='btn border-b-cyan-700' type="submit">Register</button>
                 </form>
-                <p>
-                    Already have an account? <Link href="/login">Login</Link>
+                <p className='mt-4'>
+                    Already have an account? <Link className='text-shadow-cyan-600  hover:underline' href="/login">Login</Link>
                 </p>
             </div>
         );

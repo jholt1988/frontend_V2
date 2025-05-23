@@ -5,6 +5,7 @@ import AuthContext from '@/context/AuthContext';
 import { loginUser } from '@/services/authService';
 import {useToast} from '@/lib/useToast';
 import withGuest from '../lib/withGuest';
+import Link from 'next/link';
 
  function LoginPage() {
   const { login } = useContext(AuthContext);
@@ -26,7 +27,7 @@ import withGuest from '../lib/withGuest';
       login(token); // stores token + user
       success("Login successful!");
   
-    } catch (error) {
+    } catch (errorMsg) {
       error(errorMsg.message || "Login failed");
   }   finally {
       setLoading(false);
@@ -36,12 +37,13 @@ import withGuest from '../lib/withGuest';
 
   
     return (
-          <div style={{ textAlign: "center", padding: "50px" }}>
+          <div className='card w-96 mx-auto mt-10 p-6 shadow-md shadow-gray-700 rounded'>
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
               <div>
                 <label>Email:</label>
                 <input
+                className='input'
                   type="email"
                   name="email"
                   value={formData.email}
@@ -52,6 +54,7 @@ import withGuest from '../lib/withGuest';
               <div>
                 <label>Password:</label>
                 <input
+                  className='input'
                   type="password"
                   name="password"
                   value={formData.password}
@@ -59,7 +62,7 @@ import withGuest from '../lib/withGuest';
                   required
                 />
               </div>
-              <button type="submit">Login</button>
+              <button className='btn border-b-cyan-700' type="submit">Login</button>
             </form>
             <p>
               <Link href="/forgot-password">Forgot Password?</Link>

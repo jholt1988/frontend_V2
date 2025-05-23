@@ -1,15 +1,16 @@
 'use client';
 
-import { useToast } from '@/components/ui/toast/ToastProvider';
-import { Modal, ModalTrigger, ModalContent } from '@/components/ui/modal';
+import { useToast } from '@/lib/useToast';
+import {Modal, ModalContent, ModalTrigger} from '@/components/ui/Modal';
+
 import ConfirmModal from '@/components/ui/modal/ConfirmModal';
 
 export default function PaymentManager() {
-  const { showToast } = useToast();
+  const { success } = useToast();
 
   const handleDelete = async (id) => {
     await deletePayment(id);
-    showToast('Payment deleted', 'success');
+    success('Payment deleted');
   };
 
   return (
@@ -25,7 +26,7 @@ export default function PaymentManager() {
             />
           )}
         >
-          <Button variant="danger">Delete</Button>
+          <button className='btn border-b-cyan-700' type="button">Delete</button>
         </ModalTrigger>
       </td>
       <ModalContent />

@@ -76,7 +76,7 @@
   }
 
   nav {
-    @apply px-5 py-2 flex justify-between items-center;
+    @apply px-5 py-2 flex-row justify-between items-center;
   }
 
   footer {

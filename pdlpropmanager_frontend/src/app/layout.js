@@ -12,7 +12,11 @@ import "./globals.css";
       <body>
         <AuthProvider>
           <ToastProvider>
-            <SidebarLayout>{children}</SidebarLayout>
+            <Modal>
+            <SidebarLayout>
+              {children}
+              </SidebarLayout>
+            </Modal>
           </ToastProvider>
         </AuthProvider>
       </body>
