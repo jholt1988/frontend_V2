@@ -1,0 +1,117 @@
+@import "tailwindcss";
+@plugin "daisyui"{
+  themes: dark, business--default, cupcake, forest, retro, cyberpunk, business, luxury, fantasy, dracula, acid, emerald, corporate, synthwave, black, pastel, wireframe, night, lofi;
+};
+
+
+
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    @apply transition-colors duration-300;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+
+  body {
+    @apply font-sans leading-relaxed;
+  
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold mb-2;
+    color: var(--foreground);
+  }
+
+  a {
+    @apply no-underline transition-colors duration-300;
+    color: var(--accent);
+  }
+
+  a:hover {
+    color: var(--highlight);
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-5 py-2 rounded text-base transition-all;
+    background-color: var(--accent);
+    color: var(--primary);
+  }
+
+  .btn:hover {
+    background-color: var(--highlight);
+  }
+
+  .input, .select, .textarea {
+    @apply p-2.5 border rounded w-full mb-4;
+    background-color: var(--secondary);
+    color: var(--text);
+    border-color: var(--border);
+  }
+
+  .input:focus, .select:focus, .textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .card {
+    @apply p-5 rounded shadow-md my-5;
+    background-color: var(--secondary);
+    color: var(--text);
+  }
+
+  nav, footer, header {
+    background-color: var(--primary);
+    color: var(--text);
+  }
+
+  nav {
+    @apply px-5 py-2 flex justify-between items-center;
+  }
+
+  footer {
+    @apply text-center p-3;
+  }
+
+  header {
+    @apply px-4 py-2 flex justify-between items-center;
+    background-color: var(--accent);
+  }
+
+  main {
+    @apply px-5 py-6 max-w-screen-xl mx-auto;
+  }
+
+  .layout-container {
+    @apply flex flex-row;
+  }
+
+  .sidebar {
+    @apply grid grid-flow-col;
+  }
+
+  .text-center {
+    @apply text-center;
+  }
+}
+
+@layer utilities {
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-out;
+  }
+}

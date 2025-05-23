@@ -1,0 +1,61 @@
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* Dashboard Styling in Dark Mode */
+.dark-mode .dashboard-container {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    box-shadow: none;
+}
+
+.dark-mode .dashboard-title {
+    color: #ffffff;
+}
+
+.dark-mode .dashboard-card {
+    background: #252525;
+    border: 1px solid #333;
+    box-shadow: none;
+}
+
+.dark-mode .dashboard-item {
+    background: #2e2e2e;
+    border: 1px solid #444;
+    color: #ffffff;
+}
+
+.dark-mode .dashboard-item:hover {
+    background: #3a3a3a;
+}
+
+/* Buttons */
+.dark-mode-toggle {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.dark-mode-toggle:hover {
+    background: #0056b3;
+}
+
+/* Loading and Error Messages */
+.dark-mode .loading {
+    color: #ffffff;
+}
+
+.dark-mode .error {
+    color: #ff4c4c;
+}
+
+/* Transitions */
+body, .dashboard-container, .dashboard-card, .dashboard-item {
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
