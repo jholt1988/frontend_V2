@@ -5,6 +5,7 @@ import SidebarLayout from '@/components/SidebarLayout';
 import { ToastProvider } from '@/lib/useToast';
 import { Modal } from '@/components/ui/Modal/Modal';
 import "./globals.css";
+import { ModalContent } from './components/ui/Modal';
 
 function RootLayout({ children }) {
   return (
@@ -16,6 +17,7 @@ function RootLayout({ children }) {
             <SidebarLayout>
               <Modal>
                 {children}
+                <ModalContent />
               </Modal>
             </SidebarLayout>
 

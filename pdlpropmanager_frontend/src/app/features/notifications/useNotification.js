@@ -8,13 +8,14 @@ import {
 } from '@/services/apiService';
 import { useToast } from '@/lib/useToast';
 import useNotificationSocket from '@/lib/useNotificationSocket';
+import useRequireAuth from '@/lib/useRequireAuth';
 
 const useNotifications = () => {
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
     const {success, error, info} = useToast();
-     const socket = useNotificationSocket();
-
+   
+    
     const refreshNotifications = async () => {
         try {
             const { data } = await getNotifications();
@@ -41,31 +42,26 @@ const useNotifications = () => {
         success('Notification deleted');
     };
 
-    useEffect(() => {
-        refreshNotifications();
+    // useEffect(() => {
+    //     refreshNotifications();
 
-       
-        socket.on('connect', () => {
-            info('Connected to notification service');
-        });
+    //     socket(user.id, (n) => {
+    //         setNotifications((prev) => [n, ...prev]);
+    //         info(`🔔 ${n.title}`);
+    //     });
 
-        socket.on('notification:new', (n) => {
-            setNotifications((prev) => [n, ...prev]);
-            info(`🔔 ${n.title}`);
-        });
+    //     socket(user.id, 'notification:update', (updated) => {
+    //         setNotifications((prev) => prev.map((n) => n.id === updated.id ? updated : n));
+    //     });
 
-        socket.on('notification:update', (updated) => {
-            setNotifications((prev) => prev.map((n) => n.id === updated.id ? updated : n));
-        });
+    //     useNotificationSocket(user.id, 'notification:delete', (id) => {
+    //         setNotifications((prev) => prev.filter((n) => n.id !== id));
+    //     });
 
-        socket.on('notification:delete', (id) => {
-            setNotifications((prev) => prev.filter((n) => n.id !== id));
-        });
-
-        return () => {
-            socket.disconnect();
-        };
-    }, []);
+    //     return () => {
+    //         socket.disconnect();
+    //     };
+    // }, []);
 
     return {
         notifications,

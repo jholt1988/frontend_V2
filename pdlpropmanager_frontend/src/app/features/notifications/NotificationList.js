@@ -1,35 +1,82 @@
 // src/features/notifications/NotificationsList.jsx
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useNotifications from './useNotification';
 import NotificationForm from './NotificationForm';
+import useNotificationSocket from '@/lib/useNotificationSocket';
+import useRequireAuth from '@/lib/useRequireAuth';
+import{ModalTrigger} from '@/components/ui/Modal'
+import { useModal } from '@/components/ui/Modal';
 
 const NotificationsList = () => {
+    const { user, loading } = useRequireAuth();
+    const { show, hide } = useModal();
+    const [notifications, setNotifications] = useState([]);
     const {
-        notifications,
-        loading,
+        refreshNotifications,
         createNotification,
         updateNotification,
         deleteNotification
-    } = useNotifications(); 
+    } = useNotifications();
+
+    useNotificationSocket(user.id, (n) => {
+        setNotifications((prev) => [n, ...prev]);
+        info(`🔔 ${n.title}`);
+    });
+
+    useNotificationSocket(user.id, 'notification:update', (updated) => {
+        setNotifications((prev) =>
+            prev.map((n) => (n.id === updated.id ? updated : n))
+        );
+        info(`🔔 ${updated.title}`);
+    });
+
+    useNotificationSocket(user.id, 'notification:delete', (id) => {
+        setNotifications((prev) => prev.filter((n) => n.id !== id));
+        info(`🔔 Notification deleted`);
+    });
 
     const [editingNotification, setEditingNotification] = useState(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
+
+    useEffect(() => {
+        refreshNotifications();
+
+      
+    }, []);
 
     return (
         <div className="p-6">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Notifications</h2>
-                <button
-                    onClick={() => {
-                        setEditingNotification(null);
-                        setIsFormOpen(true);
+               <ModalTrigger render={() => (
+                   <NotificationForm
+                    isOpen={isFormOpen}
+                    initialData={editingNotification}
+                    onClose={hide}
+                    onSubmit={async (data) => {
+                        if (editingNotification) {
+                            await updateNotification(editingNotification.id, data);
+                        } else {
+                            await createNotification(data);
+                        }
+                        setIsFormOpen(false);
                     }}
-                    className="px-4 py-2 bg-blue-600 text-white rounded"
-                >
-                    New Notification
-                </button>
+                />
+                )}>
+                    <div
+                       onClick={() => {
+                           setEditingNotification(true);
+                           setIsFormOpen(true);
+                       }}
+                       className="btn px-4 py-2 bg-blue-600 text-white rounded">
+                           New Notification
+                   </div>
+               </ModalTrigger>
             </div>
+                       
+        
+
 
             {loading ? (
                 <p>Loading notifications...</p>
@@ -70,20 +117,7 @@ const NotificationsList = () => {
                 </table>
             )}
 
-            {isFormOpen && (
-                <NotificationForm
-                    initialData={editingNotification}
-                    onClose={() => setIsFormOpen(false)}
-                    onSubmit={async (data) => {
-                        if (editingNotification) {
-                            await updateNotification(editingNotification.id, data);
-                        } else {
-                            await createNotification(data);
-                        }
-                        setIsFormOpen(false);
-                    }}
-                />
-            )}
+           
         </div>
     );
 };

@@ -18,7 +18,7 @@ export default function LandingPage() {
     
       <div className="bg-[var(--card)] rounded-2xl shadow-lg max-w-md w-full p-8 text-center">
         <div className="flex justify-center mb-4">
-          <Image src="/logo.svg" alt="PDL Rentals" width={64} height={64} />
+          <Image src="/logo.svg" alt="PDL Rentals" width={300} height={300} />
         </div>
 
         <h1 className="text-3xl font-bold mb-2">Welcome to PDL Rentals</h1>

@@ -86,5 +86,43 @@ export const getTenants = async (search = '') => {
   export const updateNotification = (id, data) => api.put(`/notifications/${id}`, data);
   export const deleteNotification = (id) => api.delete(`/notifications/${id}`);
 
+export const getTenantLedger = async (tenantId) => {
+  const res = await api.get(`/ledgers/${tenantId}`);
+  return res.data;
+};
+
+export const createLedgerEntry = async (tenantId, data) => {
+  const res = await api.post(`/ledgers/${tenantId}`, data);
+  return res.data;
+};
+
+export const updateLedgerEntry = async (entryId, data) => {
+  const res = await api.put(`/ledgers/entry/${entryId}`, data);
+  return res.data;
+};
+
+export const deleteLedgerEntry = async (entryId) => {
+  const res = await api.delete(`/ledgers/entry/${entryId}`);
+  return res.data;
+};
+
+export const sendLedgerStatement = async (tenantId) => {
+  const res = await api.post(`/ledgers/${tenantId}/send-statement`);
+  return res.data;
+};
+
+export const getRecentLedgerEntries = async () => {
+  const res = await api.get('/admin/recent/ledger');
+  return res.data;
+};
+
+// Documents
+export const uploadDocument = async (formData) => (await api.post('/documents/upload', formData)).data;
+export const getTenantDocuments = async (tenantId) => (await api.get(`/documents/${tenantId}`)).data;
+export const deleteDocument = async (docId) => (await api.delete(`/documents/${docId}`)).data;
+
+// Notifications
+export const markNotificationRead = async (id) => (await api.put(`/notifications/${id}/read`)).data;
+export const sendNotification = async (data) => (await api.post('/notifications', data)).data;
 
   
