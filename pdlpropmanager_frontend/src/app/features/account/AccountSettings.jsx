@@ -4,13 +4,13 @@ import { useContext, useState,useRef } from 'react';
 import AuthContext from '@/context/AuthContext';
 import { Input, Button } from '@/components/ui';
 import axiosInstance from '@/services/axiosInstance';
-import { useToast } from '@/components/ui/toast/ToastProvider';
+import { useToast } from '@/lib/useToast';
 import Image from 'next/image';
 
 
 export default function AccountSettings() {
   const { user } = useContext(AuthContext);
-  const { showToast } = useToast();
+  const { success, error } = useToast();
   const fileRef = useRef();
   const [uploading, setUploading] = useState(false);
   const [avatar, setAvatar] = useState(user?.avatarUrl || '/default-avatar.png');
@@ -28,7 +28,7 @@ export default function AccountSettings() {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setAvatar(res.data.url);
-      showToast('Avatar updated', 'success');
+      success('Avatar updated');
     } catch (err) {
       showToast('Failed to upload image', 'error');
     } finally {
@@ -51,9 +51,9 @@ export default function AccountSettings() {
   const updateProfile = async () => {
     try {
       await axiosInstance.put(`/users/${user.id}`, form);
-      showToast('Profile updated', 'success');
+    success('Profile updated');
     } catch (err) {
-      showToast('Update failed', 'error');
+      error('Update failed');
     }
   };
 

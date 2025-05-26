@@ -12,11 +12,13 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const adminRedirect = () => router.replace('/dashboard');
+  const tenantRedirect = () => router.replace('/tenant-profile'); 
 
   useEffect(() => {
     const token = localStorage.getItem('token');
 
-    if (token) {
+    if (token) { 
       try {
         const decoded = jwtDecode(token);
 
@@ -26,6 +28,7 @@ export const AuthProvider = ({ children }) => {
         }
 
         setUser(decoded);
+        
       } catch (err) {
         console.error('Invalid or expired token:', err);
         localStorage.removeItem('token');
@@ -42,7 +45,11 @@ export const AuthProvider = ({ children }) => {
     try {
       const decoded = jwtDecode(token);
       setUser(decoded);
-      router.replace('/dashboard'); // or dynamic based on role
+      if (decoded.role === 'admin') {
+        adminRedirect();
+      } else if (decoded.role === 'tenant') {
+        tenantRedirect();
+      }
     } catch (err) {
       console.error('Token decoding failed:', err);
       setUser(null);

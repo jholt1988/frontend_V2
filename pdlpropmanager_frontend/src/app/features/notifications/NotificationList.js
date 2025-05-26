@@ -1,6 +1,7 @@
 // src/features/notifications/NotificationsList.jsx
+'use client'
 import React, { useState } from 'react';
-import useNotifications from './useNotifications';
+import useNotifications from './useNotification';
 import NotificationForm from './NotificationForm';
 
 const NotificationsList = () => {
@@ -10,7 +11,7 @@ const NotificationsList = () => {
         createNotification,
         updateNotification,
         deleteNotification
-    } = useNotifications();
+    } = useNotifications(); 
 
     const [editingNotification, setEditingNotification] = useState(null);
     const [isFormOpen, setIsFormOpen] = useState(false);

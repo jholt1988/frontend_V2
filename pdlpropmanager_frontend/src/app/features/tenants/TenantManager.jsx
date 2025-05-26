@@ -6,9 +6,9 @@ import usePagination from '@/features/pagination/usePagination';
 import PaginationControls from '@/features/pagination/PaginationControls';
 import ResponsiveListTable from '@/components/ResponsiveListTable';
 import { Card, Button } from '@/components/ui';
-import { Modal, ModalTrigger, ModalContent } from '@/components/ui/modal';
+import { Modal, ModalTrigger, ModalContent } from '@/components/ui/Modal';
 import ConfirmModal from '@/components/ui/modal/ConfirmModal';
-import { useToast } from '@/components/ui/toast/ToastProvider';
+import { useToast } from '@/lib/useToast';
 
 export default function TenantManager() {
   const {
@@ -28,11 +28,11 @@ export default function TenantManager() {
     goToPage,
   } = usePagination(tenants, 10);
 
-  const { showToast } = useToast();
+  const { success,} = useToast();
 
   const handleDelete = async (id) => {
     await deleteTenant(id);
-    showToast('Tenant deleted', 'success');
+    success('Tenant deleted');
   };
 
   return (

@@ -74,8 +74,17 @@ export const getTenantMaintenance = async (id) => {
   return res.data;
 };
 
+
 export const getTenants = async (search = '') => {
     const res = await api.get(`/users?role=tenant&search=${encodeURIComponent(search)}`);
     return res.data;
   };
+
+  
+  export const getNotifications = () => api.get('/notifications');
+  export const createNotification = (data) => api.post('/notifications', data);
+  export const updateNotification = (id, data) => api.put(`/notifications/${id}`, data);
+  export const deleteNotification = (id) => api.delete(`/notifications/${id}`);
+
+
   

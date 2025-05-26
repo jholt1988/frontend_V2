@@ -7,6 +7,7 @@ import AuthContext from '../context/AuthContext';
 import ThemeToggle from './ThemeToggle';
 import { User } from 'lucide-react';
 import Image from 'next/image';
+import NotificationBell from './ui/NotificationBell';
 
 
 export default function SidebarLayout({ children }) {
@@ -26,25 +27,38 @@ export default function SidebarLayout({ children }) {
   );
 
   return (
-    <>
+    <div className={`w-full min-h-screen flex flex-row bg-background text-text`}>
       {/* Sidebar */}
-      <aside className={`sidebar flex-row w-64 bg-secondary p-4 transition-all duration-300 ${open ? 'block' : 'hidden'} md:block`}>
+
+      <aside className={`sidebar flex-row w-64 bg-secondary p-4 transition-all duration-300 ${open ? 'block' : 'hidden'}`}>
         <h2 className="text-xl font-bold mb-6">PDL Rentals</h2>
         <nav className="space-y-2">
           <NavItem href="/" label="Home" />
           {user?.role === 'tenant' && (
             <>
               <NavItem href="/tenant-profile" label="My Profile" />
-              <NavItem href="/maintenance-request" label="Submit Maintenance" />
+              
               <NavItem href="/payments/history" label="My Payments" />
+              <NavItem href="/maintenance" label="My Maintenance" />
+              <NavItem href="/maintenance-request" label="Submit Maintenance" />
+              <NavItem href="/documents" label="My Documents" />
+              <NavItem href="/notifications" label="Notifications" />
+              <NavItem href="/ledgers" label="My Account Ledger" />
+              <NavItem href="/account/settings" label="Account Settings" />
             </>
           )}
           {['staff', 'admin'].includes(user?.role) && (
             <>
+              <NavItem href="/admin/features" label="Admin Control Panel" />
+              <NavItem href="/documents" label="Documents" />
               <NavItem href="/dashboard" label="Admin Dashboard" />
               <NavItem href="/maintenance" label="Maintenance Requests" />
               <NavItem href="/payments" label="Payments" />
               <NavItem href="/tenants" label="Tenant Directory" />
+              <NavItem href="/maintenance-request" label="Submit Maintenance" />
+              <NavItem href="/notifications" label="Notification Center" />
+              <NavItem href="/ledgers" label="Account Ledgers" />
+              <NavItem href="/account/settings" label="Account Settings" />
             </>
           )}
         </nav>
@@ -56,8 +70,8 @@ export default function SidebarLayout({ children }) {
       </aside>
 
       {/* Main Area */}
-      
-        <div className="flex-1 flex flex-col">
+      <div className={`flex-1 transition-all duration-300 ${open ? 'ml-64' : 'ml-0'} md:ml-0`}>
+    
           {/* Header */}
           <header >
             <h1 className="text-lg font-semibold">PDL</h1>
@@ -67,7 +81,9 @@ export default function SidebarLayout({ children }) {
             >
               {open ? 'Hide Menu' : 'Show Menu'}
             </button>
+
           </header>
+          
           {/* User avatar + info */}
           <div className="mt-6 flex items-center gap-3">
             {avatar ? (
@@ -85,23 +101,25 @@ export default function SidebarLayout({ children }) {
             <div>
               <p className="text-sm font-medium">{user?.name || 'User'}</p>
               <p className="text-xs text-gray-400">{user?.email}</p>
+              <NotificationBell />
             </div>
+          
           </div>
+          
+      {/* Page Content */}
+      <main className='flex justify-center'>{children}</main>
 
+      {/* Footer */}
+      <footer className="footer mt-auto text-center py-3">
 
-          {/* Page Content */}
-          <main className={`flex-1 p-4 transition-all duration-300 ${open ? 'ml-64' : 'ml-0'} md:ml-0`}>{children}</main>
+        <ThemeToggle />
 
-          {/* Footer */}
-          <div className="flex items-center gap-3">
-            <ThemeToggle />
-          </div>
-          <footer className="footer mt-auto text-center py-3">
             <p className="text-sm">© {new Date().getFullYear()} PDL Rentals</p>
           </footer>
-        </div>
+        
       
        
-    </>
+    </div>
+  </div>
   );
 }
