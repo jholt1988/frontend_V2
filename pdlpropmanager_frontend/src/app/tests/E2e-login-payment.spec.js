@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 test('tenant can login and make payment', async ({ page }) => {
   await page.goto('http://localhost:3000/login');
 
-  await page.fill('input[name=email]', 'admin@pdl.com');
+  await page.fill('input[name=email]', 'admin1@pdl.com');
   await page.fill('input[name=password]', 'admin123')
   await page.click('button[type=submit]');
 
@@ -14,6 +14,6 @@ test('tenant can login and make payment', async ({ page }) => {
   await page.goto('http://localhost:3000/payments');
 
   await page.click('button:has-text("Pay $")');
-  await page.waitForURL(/checkout/);
+  await page.waitForURL('/checkout/');
   expect(page.url()).toContain('stripe');
 });

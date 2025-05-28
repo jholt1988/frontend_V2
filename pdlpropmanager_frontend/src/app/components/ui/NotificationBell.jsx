@@ -1,59 +1,55 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { getNotifications, markNotificationRead } from '@/services/apiService';
+import useNotificationSocket from '@/lib/useNotificationSocket';
+import { Bell } from 'lucide-react';
 
-export default function NotificationBell() {
+export default function NotificationBell({ userId }) {
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
 
+  const unreadCount = notifications.filter(n => !n.read).length;
+
   const fetchNotifications = async () => {
-    try {
-      const res = await axios.get('/api/v1/notifications');
-      setNotifications(res.data.notifications || []);
-    } catch (err) {
-      console.error('Failed to load notifications', err);
-    }
+    const data = await getNotifications();
+    setNotifications(data);
   };
 
-  const markAsRead = async (id) => {
-    try {
-      await axios.patch(`/api/v1/notifications/${id}`, { read: true });
-      fetchNotifications();
-    } catch (err) {
-      console.error('Failed to mark notification as read', err);
-    }
+  const handleMarkRead = async (id) => {
+    await markNotificationRead(id);
+    fetchNotifications();
   };
+
+  useNotificationSocket(userId, {
+    'notification:new': () => {
+      fetchNotifications();
+    },
+  });
 
   useEffect(() => {
     fetchNotifications();
   }, []);
 
-  const unreadCount = notifications.filter(n => !n.read).length;
-
   return (
-    <div className="relative inline-block text-left">
-      <button onClick={() => setOpen(!open)} className="relative">
-        <span className="icon-bell" />
+    <div className="relative inline-block">
+      <button onClick={() => setOpen(!open)} className="relative btn btn-ghost">
+        <Bell size={20} />
         {unreadCount > 0 && (
-          <span className="absolute top-0 right-0 inline-block w-4 h-4 bg-red-600 text-white text-xs rounded-full text-center">
+          <span className="badge badge-error badge-sm absolute -top-1 -right-1">
             {unreadCount}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-64 bg-white shadow-md rounded-lg z-50 p-2">
-          <h4 className="font-bold mb-2">Notifications</h4>
-          <ul className="space-y-1">
-            {notifications.map((n) => (
-              <li
-                key={n.id}
-                onClick={() => markAsRead(n.id)}
-                className={`cursor-pointer text-sm p-2 rounded-md ${n.read ? 'bg-gray-100' : 'bg-blue-100 font-semibold'}`}
-              >
-                {n.message}
-              </li>
-            ))}
-          </ul>
+        <div className="absolute right-0 z-50 mt-2 w-80 bg-white shadow-xl rounded border overflow-y-auto max-h-96">
+          <div className="p-2 border-b font-semibold text-sm">Notifications</div>
+          {notifications.length === 0 && <div className="p-4 text-sm">No notifications</div>}
+          {notifications.map(note => (
+            <div key={note.id} className={`p-2 border-b text-sm cursor-pointer ${note.read ? 'bg-gray-50' : 'bg-white'}`} onClick={() => handleMarkRead(note.id)}>
+              <div>{note.message}</div>
+              <div className="text-xs text-gray-500">{new Date(note.createdAt).toLocaleString()}</div>
+            </div>
+          ))}
         </div>
       )}
     </div>

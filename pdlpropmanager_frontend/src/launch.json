@@ -1,0 +1,16 @@
+{
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Next.js: Debug Development Server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 9229,
+      "cwd": "${workspaceFolder}/pdlpropmanager_frontend"
+    }
+  ]
+}

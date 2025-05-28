@@ -1,13 +1,11 @@
 'use client';
 
 import AdminDashboard from '@/features/AdminDashboard';
-import { Card } from '@/components/ui';
+import Card from '@/components/ui/Card';
 import { useToast } from '@/lib/useToast';
-import useRequireAuth from '@/lib/useRequireAuth';
- export default function AdminDashboardPage() {
 
+function AdminDashboardPage() {
   const { success } = useToast();
-  
 
   return (
     <Card className="max-w-6xl mx-auto mt-6 space-y-6">
@@ -21,8 +19,10 @@ import useRequireAuth from '@/lib/useRequireAuth';
         </button>
       </div>
 
-      <AdminDashboard  />
+      <AdminDashboard />
     </Card>
   );
 }
+
+export default AdminDashboardPage
 

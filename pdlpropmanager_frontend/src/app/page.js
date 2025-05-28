@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import './globals.css'; // Ensure you have your global styles imported
-
-export default function LandingPage() {
+import withGuest from './lib/withGuest';
+ function LandingPage() {
   return (
     <>
       <motion.div
@@ -51,3 +51,5 @@ export default function LandingPage() {
     </>
   );
 }
+
+export default LandingPage

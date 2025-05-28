@@ -8,11 +8,13 @@ import ThemeToggle from './ThemeToggle';
 import { User } from 'lucide-react';
 import Image from 'next/image';
 import NotificationBell from './ui/NotificationBell';
+import useRequireAuth from '@/lib/useRequireAuth';
+import withAuth from '@/lib/withAuth';
 
 
 export default function SidebarLayout({ children }) {
-  const { user, logout } = useContext(AuthContext);
-  const [open, setOpen] = useState(true);
+  const { user, logout } = useRequireAuth(['tenant', 'staff', 'admin']);
+  const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const avatar = user?.avatarUrl || '/default-avatar.png';
 
@@ -74,7 +76,7 @@ export default function SidebarLayout({ children }) {
     
           {/* Header */}
           <header >
-            <h1 className="text-lg font-semibold">PDL</h1>
+            <h1 className="text-lg font-semibold">PDL Rentals</h1>
             <button
               onClick={() => setOpen(!open)}
               className="text-text bg-accent rounded px-3 py-1 text-sm"
@@ -101,7 +103,10 @@ export default function SidebarLayout({ children }) {
             <div>
               <p className="text-sm font-medium">{user?.name || 'User'}</p>
               <p className="text-xs text-gray-400">{user?.email}</p>
-              <NotificationBell />
+              <div className="flex items-center gap-4">
+        {user && <NotificationBell userId={user.id} />}
+        <span>{user?.name}</span>
+      </div>
             </div>
           
           </div>
@@ -123,3 +128,4 @@ export default function SidebarLayout({ children }) {
   </div>
   );
 }
+

@@ -12,8 +12,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const adminRedirect = () => router.replace('/dashboard');
-  const tenantRedirect = () => router.replace('/tenant-profile'); 
+  const adminRedirect = () => router.push('/dashboard');
+  const tenantRedirect = () => router.push('/tenant-profile');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
     if (token) { 
       try {
         const decoded = jwtDecode(token);
+      
 
         // Check expiration
         if (decoded.exp * 1000 < Date.now()) {
@@ -35,6 +36,7 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
       }
     }
+    
 
     setLoading(false);
   }, []);
@@ -46,10 +48,11 @@ export const AuthProvider = ({ children }) => {
       const decoded = jwtDecode(token);
       setUser(decoded);
       if (decoded.role === 'admin') {
-        adminRedirect();
+        return adminRedirect();
       } else if (decoded.role === 'tenant') {
         tenantRedirect();
       }
+
     } catch (err) {
       console.error('Token decoding failed:', err);
       setUser(null);

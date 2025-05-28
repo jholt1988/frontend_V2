@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "proxy": "http://localhost:4242",
   "dependencies": {
     "@playwright/test": "^1.52.0",
     "@tailwindcss/postcss": "^4.1.7",

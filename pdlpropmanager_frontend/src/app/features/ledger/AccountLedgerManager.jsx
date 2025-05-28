@@ -59,93 +59,106 @@ export default function AdminLedgerManager() {
       <h1 className="text-2xl font-bold mb-4">Ledger Management</h1>
 
       <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Overall Ledger Activity</h2>
-        <table className="table w-full text-sm mb-6">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Type</th>
-              <th>Detail</th>
-            </tr>
-          </thead>
-          <tbody>
-            {overallLedger.map((entry, i) => (
-              <tr key={i}>
-                <td>{new Date(entry.date).toLocaleDateString()}</td>
-                <td>{entry.type}</td>
-                <td>{entry.description}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <h2 className="text-xl font-semibold mb-2">Overall Ledger Activity</h2>
+    <table className="table w-full text-sm mb-6">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Detail</th>
+        </tr>
+      </thead>
+      <tbody>
+        {overallLedger.map((entry, i) => (
+          <tr key={i}>
+            <td>{new Date(entry.date).toLocaleDateString()}</td>
+            <td>{entry.type}</td>
+            <td>{entry.description}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <select onChange={e => setTenantId(e.target.value)} className="select select-bordered mb-4">
+    <option value="">Select Tenant</option>
+    {tenants.map(t => (
+      <option key={t.id} value={t.id}>{t.name}</option>
+    ))}
+  </select>
+
+  {tenantId && (
+    <>
+      <div className="mb-4 flex gap-4 flex-wrap">
+        <button className="btn btn-primary" onClick={fetchLedger}>Load Ledger</button>
+        <button className="btn btn-secondary" onClick={handleSendStatement}>Send Statement</button>
+
+        <input type="date" name="start" value={filters.start} onChange={handleFilterChange} className="input input-bordered" />
+        <input type="date" name="end" value={filters.end} onChange={handleFilterChange} className="input input-bordered" />
+        <select name="description" value={filters.description} onChange={handleFilterChange} className="select select-bordered">
+          <option value="">Filter Type</option>
+          <option value="All">All</option>
+          <option value="Rent">Rent</option>
+          <option value="Late Fee">Late Fee</option>
+          <option value="Security Deposit">Security Deposit</option>
+          <option value="Repair Fee">Repair Fee</option>
+          <option value="Legal Fee">Legal Fee</option>
+          <option value="Other">Other</option>
+        </select>
       </div>
 
-      <select onChange={e => setTenantId(e.target.value)} className="select select-bordered mb-4">
-        <option value="">Select Tenant</option>
-        {tenants.map(t => (
-          <option key={t.id} value={t.id}>{t.name}</option>
-        ))}
-      </select>
+      <form onSubmit={handleAddOrUpdate} className="space-y-2 mb-6">
+        <h3 className="font-semibold">{form.id ? 'Edit Entry' : 'Add Charge'}</h3>
+        <select name="description" value={form.description} onChange={handleFormChange} className="select select-bordered">
+          <option value="">Select Type</option>
+          <option value="Rent">Rent</option>
+          <option value="Late Fee">Late Fee</option>
+          <option value="Security Deposit">Security Deposit</option>
+          <option value="Repair Fee">Repair Fee</option>
+          <option value="Legal Fee">Legal Fee</option>
+          <option value="Other">Other</option>
+        </select>
+        <input
+          type="number"
+          name="amount"
+          placeholder="Amount"
+          value={form.amount}
+          onChange={handleFormChange}
+          className="input input-bordered w-full"
+          required
+        />
+        <button type="submit" className="btn btn-success">{form.id ? 'Update Entry' : 'Add Charge'}</button>
+      </form>
 
-      {tenantId && (
-        <>
-          <div className="mb-4">
-            <button className="btn btn-primary mr-4" onClick={fetchLedger}>Load Ledger</button>
-            <button className="btn btn-secondary" onClick={handleSendStatement}>Send Statement</button>
-          </div>
-
-          <form onSubmit={handleAddOrUpdate} className="space-y-2 mb-6">
-            <h3 className="font-semibold">{form.id ? 'Edit Entry' : 'Add Charge'}</h3>
-            <select name="description" value={form.description} onChange={handleFormChange} className="select select-bordered">
-              <option value="">Select Type</option>
-              <option value="Rent">Rent</option>
-              <option value="Late Fee">Late Fee</option>
-              <option value="Security Deposit">Security Deposit</option>
-              <option value="Repair Fee">Repair Fee</option>
-              <option value="Legal Fee">Legal Fee</option>
-              <option value="Other">Other</option>
-            </select>
-            <input
-              type="number"
-              name="amount"
-              placeholder="Amount"
-              value={form.amount}
-              onChange={handleFormChange}
-              className="input input-bordered w-full"
-              required
-            />
-            <button type="submit" className="btn btn-success">{form.id ? 'Update Entry' : 'Add Charge'}</button>
-          </form>
-
-          <table className="table w-full text-sm">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Type</th>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Balance</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {entries.map((entry, i) => (
-                <tr key={i} className={entry.type === 'charge' ? 'bg-red-50' : 'bg-green-50'}>
-                  <td>{new Date(entry.date).toLocaleDateString()}</td>
-                  <td>{entry.type}</td>
-                  <td>{entry.description}</td>
-                  <td>${parseFloat(entry.amount).toFixed(2)}</td>
-                  <td>${parseFloat(entry.balanceAfter).toFixed(2)}</td>
-                  <td>
-                    <button className="btn btn-xs btn-warning mr-2" onClick={() => handleEdit(entry)}>Edit</button>
-                    <button className="btn btn-xs btn-error" onClick={() => handleDelete(entry.id)}>Delete</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </>
-      )}
-    </div>
+      <table className="table w-full text-sm">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Balance</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filtered.map((entry, i) => (
+            <tr key={i} className={entry.type === 'charge' ? 'bg-red-50' : 'bg-green-50'}>
+              <td>{new Date(entry.date).toLocaleDateString()}</td>
+              <td>{entry.type}</td>
+              <td>{entry.description}</td>
+              <td>${parseFloat(entry.amount).toFixed(2)}</td>
+              <td>${parseFloat(entry.balanceAfter).toFixed(2)}</td>
+              <td>
+                <button className="btn btn-xs btn-warning mr-2" onClick={() => handleEdit(entry)}>Edit</button>
+                <button className="btn btn-xs btn-error" onClick={() => handleDelete(entry.id)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  )}
+</div>
   );
 }

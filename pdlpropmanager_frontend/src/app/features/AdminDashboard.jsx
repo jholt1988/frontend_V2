@@ -7,9 +7,10 @@ import { getDashboardStats } from '@/services/apiService';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import ExportControls from '@/components/ExportControls';
 import useRequireAuth from '@/lib/useRequireAuth';
-import RecentActivityTable from '@/components/ui/Charts/RecentActivityChart';
+import RecentActivityTable from '@/components/ui/Charts/RecentActivityChart'
+import withAuth from '@/lib/withAuth';
 
-export default function AdminDashboard() {
+function AdminDashboard() {
    const { user, loading } = useRequireAuth(['admin', 'staff']);
   const [summary, setSummary] = useState({
     totalTenants: 0,
@@ -39,7 +40,7 @@ export default function AdminDashboard() {
   }, [user]);
 
   if (!user &&
-     (user.role !== 'admin' ||user.role !== 'staff')) {
+     (user.role !== 'admin' || user.role !== 'staff')) {
     return <p className="text-red-500">Unauthorized</p>;
   }
 
@@ -115,3 +116,5 @@ function StatCard({ label, value }) {
     </div>
   );
 }
+
+export default withAuth(AdminDashboard,['admin', 'staff']);

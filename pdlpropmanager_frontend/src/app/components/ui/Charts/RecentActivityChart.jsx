@@ -4,15 +4,16 @@ import { useEffect, useState } from 'react';
 import axiosInstance from '@/services/axiosInstance';
 import ResponsiveListTable from '@/components/ResponsiveListTable';
 import { Card } from '@/components/ui';
+;
 
 export default function RecentActivityTable({ type = 'payments' }) {
   const [data, setData] = useState([]);
-
+const baseurl = process.env.API_URL || 'http://localhost:3000/api/v1';
   useEffect(() => {
     const endpointMap = {
-      tenants: '/admin/recent/tenants',
-      payments: '/admin/recent/payments',
-      requests: '/admin/recent/requests',
+      ledgers: `${baseurl}/admin/recent/ledger`,
+      payments: `${baseurl}/admin/recent/payments`,
+      maintenance: `${baseurl}/admin/recent/maintenance`,
     };
 
     const fetchData = async () => {
@@ -28,16 +29,17 @@ export default function RecentActivityTable({ type = 'payments' }) {
   }, [type]);
 
   const columnMap = {
-    tenants: ['Name', 'Email', 'Joined'],
+    ledgers: ['Name', 'Email', 'Joined'],
     payments: ['Tenant', 'Amount', 'Date'],
-    requests: ['Title', 'Property', 'Status'],
+    maintenance: ['Title', 'Property', 'Status'],
   };
 
   const renderRow = {
     tenants: (item) => (
       <tr key={item.id}>
-        <td>{item.name}</td>
-        <td>{item.email}</td>
+        <td>{item.amount}</td>
+        <td>{item.description}</td>
+        <td>{item.type}</td>
         <td>{item.createdAt?.slice(0, 10)}</td>
       </tr>
     ),

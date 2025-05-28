@@ -21,12 +21,14 @@ export default function StripePaymentButton({ tenantId, amount }) {
   };
 
   return (
-    <button
-      onClick={handleCheckout}
-      className="btn btn-primary"
-      disabled={loading}
-    >
-      {loading ? 'Processing...' : `Pay $${amount}`}
-    </button>
+    <form action={handleCheckout} method="POST" className="flex justify-center">
+      <button
+       type='submit'
+        className="btn btn-primary"
+        disabled={loading}
+      >
+        {loading ? 'Processing...' : `Pay $${amount}`}
+      </button>
+    </form>
   );
 }

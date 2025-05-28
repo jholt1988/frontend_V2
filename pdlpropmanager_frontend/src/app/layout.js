@@ -6,11 +6,13 @@ import { ToastProvider } from '@/lib/useToast';
 import { Modal } from '@/components/ui/Modal/Modal';
 import "./globals.css";
 import { ModalContent } from './components/ui/Modal';
+import ErrorBoundary from './components/ui/ErrorBoundary';
 
 function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+        <ErrorBoundary>
         <AuthProvider>
           <ToastProvider>
 
@@ -23,6 +25,7 @@ function RootLayout({ children }) {
 
           </ToastProvider>
         </AuthProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

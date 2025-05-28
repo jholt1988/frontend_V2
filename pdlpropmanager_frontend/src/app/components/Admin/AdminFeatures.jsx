@@ -2,8 +2,9 @@
 import Link from 'next/link';
 import { useContext } from 'react';
 import useRequireAuth from '@/lib/useRequireAuth';
+import withAuth from '@/lib/withAuth';
 
-export default function FeaturesPage() {
+ function FeaturesPage() {
   const { user } = useRequireAuth(['admin', 'staff']);
 
   if (!user || (user.role !== 'admin' && user.role !== 'staff')) {
@@ -54,3 +55,8 @@ export default function FeaturesPage() {
     </div>
   );
 }
+
+export default withAuth(FeaturesPage, {
+  roles: ['admin', 'staff'],
+  redirect: '/login',
+});

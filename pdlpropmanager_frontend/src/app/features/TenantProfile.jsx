@@ -1,15 +1,16 @@
 'use client';
 
 import { useEffect, useState, useContext } from 'react';
-import AuthContext from '@/context/AuthContext';
+import useRequireAuth from '@/lib/useRequireAuth';
 import { getTenantProfile, updateTenantProfile } from '@/services/apiService';
 import { Input, Button, Card } from '@/components/ui';
 
 export default function TenantProfile() {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useRequireAuth(['tenant']);
   const [profile, setProfile] = useState(null);
   const [formData, setFormData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
+
 
   useEffect(() => {
     if (user?.id) {
