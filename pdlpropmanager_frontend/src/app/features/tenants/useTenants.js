@@ -5,7 +5,7 @@ import {
     createTenant as apiCreate,
     updateTenant as apiUpdate,
     deleteTenant as apiDelete
-} from './tenant.api';
+} from '@/services/apiService';
 import { toast } from 'react-toastify';
 
 const useTenants = () => {

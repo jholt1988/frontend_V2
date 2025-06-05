@@ -80,11 +80,42 @@ export const getTenants = async (search = '') => {
     return res.data;
   };
 
+  export const createTenant = async (data) => {
+    const res = await api.post('/tenants', data);
+    return res.data;
+  };
+
+  export const getTenant = async (id) => {
+    const res = await api.get(`/tenants/${id}`);
+    return res.data;
+  };
+
+  export const updateTenant = async (id, data) => {
+    const res = await api.put(`/tenants/${id}`, data);
+    return res.data;
+  };
+
+  export const deleteTenant = async (id) => {
+    const res = await api.delete(`/tenants/${id}`);
+    return res.data;
+  };
   
-  export const getNotifications = () => api.get('/notifications');
-  export const createNotification = (data) => api.post('/notifications', data);
-  export const updateNotification = (id, data) => api.put(`/notifications/${id}`, data);
-  export const deleteNotification = (id) => api.delete(`/notifications/${id}`);
+  export const getNotifications = async (id) => {
+    const res = await api.get(`/notifications/${id}`);
+    return res.data;
+  };
+  export const createNotification = async (data) => {
+    const res = await api.post('/notifications', data);
+    return res.data;
+  };
+  export const updateNotification = async (id, data) => {
+    const res = await api.put(`/notifications/${id}`, data);
+    return res.data;
+  };
+  export const deleteNotification = async (id) => {
+    const res = await api.delete(`/notifications/${id}`);
+    return res.data;
+  };
 
 export const getTenantLedger = async (tenantId) => {
   const res = await api.get(`/ledgers/${tenantId}`);

@@ -8,14 +8,15 @@ export default function withAuth(Component, allowedRoles = []) {
   return function ProtectedComponent(props) {
     const { user, loading } = useAuth();
     const router = useRouter();
+    console.log('withAuth', { user, loading, allowedRoles });
 
     useEffect(() => {
-      if (!loading && (!user || (allowedRoles.length && !allowedRoles.includes(user.role)))) {
+      if (loading && (!user || (allowedRoles.length > 0 && !allowedRoles.includes(user.role)))) {
         router.replace('/login');
       }
-    }, [user, loading, router]);
+    }, [loading, user, allowedRoles, router]);
 
-    if (loading || !user || (allowedRoles.length && !allowedRoles.includes(user.role))) {
+    if ( !user || (allowedRoles.length > 0 && !allowedRoles.includes(user.role))) {
       return <div className="p-6">Loading or redirecting...</div>;
     }
 

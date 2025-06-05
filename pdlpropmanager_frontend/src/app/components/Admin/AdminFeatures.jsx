@@ -5,7 +5,7 @@ import useRequireAuth from '@/lib/useRequireAuth';
 import withAuth from '@/lib/withAuth';
 
  function FeaturesPage() {
-  const { user } = useRequireAuth(['admin', 'staff']);
+  const { user, loading } = useRequireAuth(['admin', 'staff']);
 
   if (!user || (user.role !== 'admin' && user.role !== 'staff')) {
     return <p className="text-center text-red-600">Access denied: Admin or Staff only</p>;
@@ -56,7 +56,5 @@ import withAuth from '@/lib/withAuth';
   );
 }
 
-export default withAuth(FeaturesPage, {
-  roles: ['admin', 'staff'],
-  redirect: '/login',
-});
+export default withAuth(FeaturesPage,['admin', 'staff'])
+

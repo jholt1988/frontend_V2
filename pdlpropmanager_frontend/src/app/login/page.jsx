@@ -1,17 +1,17 @@
 'use client';
 
 import { useState, useContext } from 'react';
-import AuthContext from '@/context/AuthContext';
 import { loginUser } from '@/services/authService';
+import { useAuth } from '@/context/AuthContext';
 import {useToast} from '@/lib/useToast';
 import withGuest from '../lib/withGuest';
 import Link from 'next/link';
 
  function LoginPage() {
-  const { login } = useContext(AuthContext);
+  const { login, loading : isLoading } = useAuth();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errorMsg, setErrorMsg] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(isLoading || false); // Use isLoading from context if available
   const {success, error, warning, info} = useToast();
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,12 +24,12 @@ import Link from 'next/link';
     setErrorMsg('');
     try {
       const { token } = await loginUser(formData);
-      login(token); // stores token + user
+       login(token); // stores token + user
       success("Login successful!");
   
     } catch (errorMsg) {
       error(errorMsg.message || "Login failed");
-  }   finally {
+    } finally {
       setLoading(false);
     }
   };

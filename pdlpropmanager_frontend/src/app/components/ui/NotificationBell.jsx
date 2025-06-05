@@ -19,15 +19,9 @@ export default function NotificationBell({ userId }) {
     fetchNotifications();
   };
 
-  useNotificationSocket(userId, {
-    'notification:new': () => {
-      fetchNotifications();
-    },
-  });
-
-  useEffect(() => {
+  useNotificationSocket(userId, () => {
     fetchNotifications();
-  }, []);
+  });
 
   return (
     <div className="relative inline-block">
@@ -41,7 +35,7 @@ export default function NotificationBell({ userId }) {
       </button>
 
       {open && (
-        <div className="absolute right-0 z-50 mt-2 w-80 bg-white shadow-xl rounded border overflow-y-auto max-h-96">
+        <div className=" absolute right z-50 mt-2 w-80 bg-white shadow-xl rounded border overflow-y-auto max-h-96">
           <div className="p-2 border-b font-semibold text-sm">Notifications</div>
           {notifications.length === 0 && <div className="p-4 text-sm">No notifications</div>}
           {notifications.map(note => (

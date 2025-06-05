@@ -11,9 +11,13 @@ export default function withGuest(Component) {
 
     useEffect(() => {
       if (!loading && user) {
-        router.replace('/dashboard');
-      }
-    }, [user, loading]);
+        if (user.role === 'admin') {
+          router.replace('/dashboard');
+        } else if (user.role === 'tenant') {
+          router.replace('/tenant-profile');
+        }
+      }     
+    }, [ ]);
 
     if (loading || user) {
       return <div className="p-6">Redirecting...</div>;

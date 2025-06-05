@@ -4,9 +4,9 @@ import { useEffect, useState, useContext } from 'react';
 import useRequireAuth from '@/lib/useRequireAuth';
 import { getTenantProfile, updateTenantProfile } from '@/services/apiService';
 import { Input, Button, Card } from '@/components/ui';
-
-export default function TenantProfile() {
-  const { user, loading } = useRequireAuth(['tenant']);
+import withAuth from '@/lib/withAuth';
+function TenantProfile() {
+  const { user, loading } = useRequireAuth();
   const [profile, setProfile] = useState(null);
   const [formData, setFormData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
@@ -71,3 +71,5 @@ export default function TenantProfile() {
     </Card>
   );
 }
+
+export default withAuth(TenantProfile, ['tenant']);

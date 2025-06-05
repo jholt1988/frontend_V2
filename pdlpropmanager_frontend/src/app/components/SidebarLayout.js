@@ -3,17 +3,16 @@
 import { useState, useContext } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import AuthContext from '../context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import ThemeToggle from './ThemeToggle';
 import { User } from 'lucide-react';
 import Image from 'next/image';
 import NotificationBell from './ui/NotificationBell';
-import useRequireAuth from '@/lib/useRequireAuth';
-import withAuth from '@/lib/withAuth';
+
 
 
 export default function SidebarLayout({ children }) {
-  const { user, logout } = useRequireAuth(['tenant', 'staff', 'admin']);
+  const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const avatar = user?.avatarUrl || '/default-avatar.png';

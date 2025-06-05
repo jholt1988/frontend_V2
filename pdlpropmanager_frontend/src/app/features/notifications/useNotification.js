@@ -7,23 +7,22 @@ import {
     deleteNotification as apiDelete
 } from '@/services/apiService';
 import { useToast } from '@/lib/useToast';
-import useNotificationSocket from '@/lib/useNotificationSocket';
 import useRequireAuth from '@/lib/useRequireAuth';
 
 const useNotifications = () => {
+    const { user, loading } = useRequireAuth();
     const [notifications, setNotifications] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading , setIsLoading] = useState(loading);
     const {success, error, info} = useToast();
    
-    
     const refreshNotifications = async () => {
         try {
-            const { data } = await getNotifications();
+            const { data } = await getNotifications(user.id);
             setNotifications(data);
         } catch {
             error('Failed to load notifications');
         } finally {
-            setLoading(false);
+            setIsLoading(!isLoading);
         }
     };
 

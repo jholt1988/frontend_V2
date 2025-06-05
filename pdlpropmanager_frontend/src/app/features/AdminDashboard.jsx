@@ -11,7 +11,7 @@ import RecentActivityTable from '@/components/ui/Charts/RecentActivityChart'
 import withAuth from '@/lib/withAuth';
 
 function AdminDashboard() {
-   const { user, loading } = useRequireAuth(['admin', 'staff']);
+   const { user, loading: isLoading } = useRequireAuth(['admin', 'staff']);
   const [summary, setSummary] = useState({
     totalTenants: 0,
     totalPayments: 0,
@@ -20,7 +20,7 @@ function AdminDashboard() {
     openMaintenance: 0,
     pendingPayments: 0,
     });
-  const [isLoading, setIsLoading] = useState(loading);
+  const [loading, setIsLoading] = useState(isLoading);
   const [stats, getStats] = useState(0)
   const chartRef = useRef();
   console.log(user)
@@ -44,7 +44,7 @@ function AdminDashboard() {
     return <p className="text-red-500">Unauthorized</p>;
   }
 
-  if (isLoading) return <p>Loading dashboard...</p>;
+  if (loading ) return <p>Loading dashboard...</p>;
 
   return (
     <div className="max-w-6xl mx-auto bg-white p-6 rounded shadow">

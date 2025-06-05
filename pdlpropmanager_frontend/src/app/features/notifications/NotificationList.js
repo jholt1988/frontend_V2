@@ -1,23 +1,27 @@
 // src/features/notifications/NotificationsList.jsx
 'use client'
 import React, { useEffect, useState } from 'react';
-import useNotifications from './useNotification';
 import NotificationForm from './NotificationForm';
+import {
+        
+        createNotification,
+        updateNotification,
+        deleteNotification
+    } from '@/services/apiService';
+import useNotifications from './useNotification'
 import useNotificationSocket from '@/lib/useNotificationSocket';
 import useRequireAuth from '@/lib/useRequireAuth';
 import{ModalTrigger} from '@/components/ui/Modal'
 import { useModal } from '@/components/ui/Modal';
+import withAuth from '@/lib/withAuth';
+import { Card } from '@/components/ui';
 
 const NotificationsList = () => {
     const { user, loading } = useRequireAuth();
     const { show, hide } = useModal();
     const [notifications, setNotifications] = useState([]);
-    const {
-        refreshNotifications,
-        createNotification,
-        updateNotification,
-        deleteNotification
-    } = useNotifications();
+    const { refreshNotifications } = useNotifications();
+
 
     useNotificationSocket(user.id, (n) => {
         setNotifications((prev) => [n, ...prev]);
@@ -37,7 +41,7 @@ const NotificationsList = () => {
     });
 
     const [editingNotification, setEditingNotification] = useState(null);
-    const [isFormOpen, setIsFormOpen] = useState(false);
+    const [isFormOpen, setIsFormOpen] = useState(hide);
 
     useEffect(() => {
         refreshNotifications();
@@ -46,27 +50,27 @@ const NotificationsList = () => {
     }, []);
 
     return (
-        <div className="p-6">
+        <Card className="card p-6">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Notifications</h2>
                <ModalTrigger render={() => (
                    <NotificationForm
-                    isOpen={isFormOpen}
+                   show={isFormOpen}
                     initialData={editingNotification}
                     onClose={hide}
                     onSubmit={async (data) => {
-                        if (editingNotification) {
+                        if (editingNotification ) {
                             await updateNotification(editingNotification.id, data);
                         } else {
                             await createNotification(data);
                         }
-                        setIsFormOpen(false);
+                        setIsFormOpen(hide);
                     }}
                 />
-                )}>
+    )}>
                     <div
                        onClick={() => {
-                           setEditingNotification(true);
+                           setEditingNotification({});
                            setIsFormOpen(true);
                        }}
                        className="btn px-4 py-2 bg-blue-600 text-white rounded">
@@ -118,8 +122,8 @@ const NotificationsList = () => {
             )}
 
            
-        </div>
+        </Card>
     );
 };
 
-export default NotificationsList;
+export default withAuth(NotificationsList,['admin', 'manager', 'tenant']);

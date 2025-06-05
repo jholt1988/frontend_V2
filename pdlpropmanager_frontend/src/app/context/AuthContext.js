@@ -12,8 +12,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const adminRedirect = () => router.push('/dashboard');
-  const tenantRedirect = () => router.push('/tenant-profile');
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -48,9 +47,9 @@ export const AuthProvider = ({ children }) => {
       const decoded = jwtDecode(token);
       setUser(decoded);
       if (decoded.role === 'admin') {
-        return adminRedirect();
+         router.replace('/dashboard');
       } else if (decoded.role === 'tenant') {
-        tenantRedirect();
+         router.replace('/tenant-profile');
       }
 
     } catch (err) {

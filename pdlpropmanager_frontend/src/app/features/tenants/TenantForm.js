@@ -1,6 +1,6 @@
 // src/features/tenants/TenantForm.jsx
-import React, { useState } from 'react';
-import ModalWrapper from '../../components/ModalWrapper';
+'use client'
+import React, { useState, useEffect } from 'react';
 
 const TenantForm = ({ initialData = {}, onClose, onSubmit }) => {
     const [properties, setProperties] = useState([]);
@@ -27,7 +27,7 @@ const TenantForm = ({ initialData = {}, onClose, onSubmit }) => {
     };
 
     return (
-        <ModalWrapper onClose={onClose}>
+        <div onClose={onClose}>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                 <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
                     <h3 className="text-xl font-semibold mb-4">
@@ -84,7 +84,7 @@ const TenantForm = ({ initialData = {}, onClose, onSubmit }) => {
                     </form>
                 </div>
             </div>
-        </ModalWrapper>
+        </div>
     );
 };
 

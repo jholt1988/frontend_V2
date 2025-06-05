@@ -1,29 +1,31 @@
-'use client';
-import { useEffect } from 'react';
-import io from 'socket.io-client';
-
-let socket;
+import { useEffect, useRef } from 'react';
+import { io } from 'socket.io-client';
 
 export default function useNotificationSocket(userId, onNewNotification) {
+  const socketRef = useRef(null);
+
   useEffect(() => {
     if (!userId) return;
 
-    socket = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
+    const socket = io("ws://localhost:5000" ,{
+      path: '/socket',
+      transports: ['websocket'],
       query: { userId },
+      reconnection: true,
     });
+
+    socketRef.current = socket;
+
+    socket.emit('join', userId);
 
     socket.on('notification:new', (notification) => {
-      onNewNotification(notification);
+      if (onNewNotification) {
+        onNewNotification(notification);
+      }
     });
 
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
+    
   }, [userId, onNewNotification]);
-} 
 
-// Example usage in NotificationBell
-// const { user } = useContext(AuthContext);
-// useNotificationSocket(user?.id, (newNote) => setNotifications(prev => [newNote, ...prev]));
+  return socketRef;
+}

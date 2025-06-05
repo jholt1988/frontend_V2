@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useContext } from 'react';
-import AuthContext from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { registerUser } from '@/services/authService';
 
 import Link from 'next/link';
@@ -9,14 +9,14 @@ import withGuest from '../lib/withGuest';
 import { useToast } from '@/lib/useToast';
  function RegisterPage() {
   const {success, error, warning, info} = useToast();
-  const { login } = useContext(AuthContext);
-  
+  const { login } = useAuth();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     phone: '',
-    role: '', // default role
+    role: 'tenant', // default role
   });
 
   const [isError, setIsError] = useState('');
