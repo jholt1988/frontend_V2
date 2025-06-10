@@ -75,35 +75,36 @@ export const getTenantMaintenance = async (id) => {
 };
 
 
-export const getTenants = async (search = '') => {
-    const res = await api.get(`/users?role=tenant&search=${encodeURIComponent(search)}`);
+export const getTenants = async () => {
+    const res = await api.get(`/users?role=tenant`);
     return res.data;
   };
 
   export const createTenant = async (data) => {
-    const res = await api.post('/tenants', data);
+    const res = await api.post('/users/create', data);
     return res.data;
   };
 
   export const getTenant = async (id) => {
-    const res = await api.get(`/tenants/${id}`);
+    const res = await api.get(`/users/${id}`);
     return res.data;
   };
 
   export const updateTenant = async (id, data) => {
-    const res = await api.put(`/tenants/${id}`, data);
+    const res = await api.put(`/users/${id}`, data);
     return res.data;
   };
 
   export const deleteTenant = async (id) => {
-    const res = await api.delete(`/tenants/${id}`);
+    const res = await api.delete(`/users/${id}`);
     return res.data;
   };
-  
+
   export const getNotifications = async (id) => {
     const res = await api.get(`/notifications/${id}`);
     return res.data;
   };
+
   export const createNotification = async (data) => {
     const res = await api.post('/notifications', data);
     return res.data;
@@ -155,5 +156,5 @@ export const deleteDocument = async (docId) => (await api.delete(`/documents/${d
 // Notifications
 export const markNotificationRead = async (id) => (await api.put(`/notifications/${id}/read`)).data;
 export const sendNotification = async (data) => (await api.post('/notifications', data)).data;
-
+  
   

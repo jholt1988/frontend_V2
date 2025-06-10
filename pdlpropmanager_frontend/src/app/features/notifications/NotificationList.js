@@ -55,15 +55,13 @@ const NotificationsList = () => {
                 <h2 className="text-2xl font-bold">Notifications</h2>
                <ModalTrigger render={() => (
                    <NotificationForm
-                   show={isFormOpen}
+                 
                     initialData={editingNotification}
                     onClose={hide}
                     onSubmit={async (data) => {
-                        if (editingNotification ) {
-                            await updateNotification(editingNotification.id, data);
-                        } else {
+                      
                             await createNotification(data);
-                        }
+                        
                         setIsFormOpen(hide);
                     }}
                 />

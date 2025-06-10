@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as authService from "../../services/authService";
-import { toast } from "react-toastify";
-import { a } from "framer-motion/client";
+import { useToast } from "@/lib/useToast";
+import { a, s } from "framer-motion/client";
 
 const Register = () => {
     const navigate = useNavigate();
@@ -13,7 +13,8 @@ const Register = () => {
         confirmPassword: "",
         role:""
     });
-    
+    const { success, error } = useToast();
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -21,16 +22,16 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (formData.password !== formData.confirmPassword) {
-            toast.error("Passwords do not match!");
+            error("Passwords do not match!");
             return;
         }
         try {
             const userData = await authService.registerUser(formData);
             console.log(userData)
-            toast.success("Registration successful!");
+            success("Registration successful!");
             navigate("/login");
         } catch (error) {
-            toast.error(error.message || "Registration failed");
+                error(error.message || "Registration failed");
         }
     };
 

@@ -3,16 +3,16 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '@/services/axiosInstance';
 import { Card, Button, Badge } from '@/components/ui';
-import { Modal, ModalTrigger, ModalContent } from '@/components/ui/modal';
+import { ModalTrigger, ModalContent } from '@/components/ui/Modal';
 import ConfirmModal from '@/components/ui/modal/ConfirmModal';
 import PropertyForm from './PropertyForm';
-import { useToast } from '@/components/ui/toast/ToastProvider';
+import { useToast } from '@/lib/useToast';
 
 export default function PropertyManager() {
   const [properties, setProperties] = useState([]);
   const [editing, setEditing] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const { showToast } = useToast();
+  const { success, error } = useToast();
 
   const fetchProps = async () => {
     const res = await axiosInstance.get('/properties');
@@ -25,17 +25,17 @@ export default function PropertyManager() {
 
   const handleDelete = async (id) => {
     await axiosInstance.delete(`/properties/${id}`);
-    showToast('Property deleted', 'success');
+    success('Property deleted');
     fetchProps();
   };
 
   const handleSave = async (data) => {
     if (editing) {
       await axiosInstance.put(`/properties/${editing.id}`, data);
-      showToast('Property updated');
+      success('Property updated');
     } else {
       await axiosInstance.post('/properties', data);
-      showToast('Property created');
+      success('Property created');
     }
 
     setIsOpen(false);
@@ -46,9 +46,11 @@ export default function PropertyManager() {
   return (
     <Card className="space-y-4">
       <div className="flex justify-end">
-        <Button onClick={() => { setEditing(null); setIsOpen(true); }}>
-          Add Property
-        </Button>
+        <ModalTrigger render={(hide) => (
+          <PropertyForm onClose={hide} onSubmit={handleSave} />
+        )}>
+          <div className='btn '>Add Property</div>
+        </ModalTrigger>
       </div>
 
       <table className="w-full border">

@@ -1,18 +1,20 @@
 // src/features/tenants/TenantForm.jsx
 'use client'
 import React, { useState, useEffect } from 'react';
-
+import api from '@/services/axiosInstance';
 const TenantForm = ({ initialData = {}, onClose, onSubmit }) => {
     const [properties, setProperties] = useState([]);
 
     useEffect(() => {
-        axiosInstance.get('/properties').then(res => setProperties(res.data));
+        api.get('/properties').then(res => setProperties(res.data));
     }, []);
 
     const [form, setForm] = useState({
-        name: '',
+        name:  '',
         email: '',
         phone: '',
+        password: "password",
+        role: 'tenant',
         ...initialData
     });
 

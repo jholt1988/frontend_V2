@@ -6,18 +6,18 @@ import {
     updateTenant as apiUpdate,
     deleteTenant as apiDelete
 } from '@/services/apiService';
-import { toast } from 'react-toastify';
+import { useToast } from '@/lib/useToast';
 
 const useTenants = () => {
     const [tenants, setTenants] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const { success, error } = useToast();
     const refreshTenants = async () => {
         try {
             const { data } = await getTenants();
             setTenants(data);
         } catch {
-            toast.error('Failed to load tenants');
+            error('Failed to load tenants');
         } finally {
             setLoading(false);
         }
@@ -25,20 +25,22 @@ const useTenants = () => {
 
     const createTenant = async (data) => {
         await apiCreate(data);
-        toast.success('Tenant created');
-        refreshTenants();
+        success('Tenant created');
+        await refreshTenants(); // Refresh after creation
+     
     };
 
     const updateTenant = async (id, data) => {
         await apiUpdate(id, data);
-        toast.success('Tenant updated');
-        refreshTenants();
+        success('Tenant updated');
+        await refreshTenants(); // Refresh after update
+        
     };
 
     const deleteTenant = async (id) => {
         await apiDelete(id);
-        toast.success('Tenant deleted');
-        refreshTenants();
+        success('Tenant deleted');
+        await refreshTenants(); // Refresh after deletion
     };
 
     useEffect(() => {

@@ -34,6 +34,7 @@ const NotificationForm = ({ initialData = {}, onClose, onSubmit,  }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         onSubmit(form);
+        onClose();
     };
     
 

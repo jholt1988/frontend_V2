@@ -7,8 +7,7 @@ export default function PropertyForm({ initialData = {}, onClose, onSubmit }) {
   const [form, setForm] = useState({
     name: initialData.name || '',
     address: initialData.address || '',
-    unitCount: initialData.unitCount || '',
-    manager: initialData.manager || '',
+    units: initialData.units || '',
     status: initialData.status || 'active',
   });
 
@@ -20,6 +19,7 @@ export default function PropertyForm({ initialData = {}, onClose, onSubmit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(form);
+    onClose();
   };
 
   return (
@@ -45,9 +45,9 @@ export default function PropertyForm({ initialData = {}, onClose, onSubmit }) {
             required
           />
           <Input
-            name="unitCount"
+            name="units"
             type="number"
-            value={form.unitCount}
+            value={form.units}
             onChange={handleChange}
             placeholder="Number of Units"
             required

@@ -60,6 +60,8 @@ export default function SidebarLayout({ children }) {
               <NavItem href="/notifications" label="Notification Center" />
               <NavItem href="/ledgers" label="Account Ledgers" />
               <NavItem href="/account/settings" label="Account Settings" />
+              <NavItem href="/reports" label="Reports" />
+              <NavItem href="/properties" label="Properties" />
             </>
           )}
         </nav>

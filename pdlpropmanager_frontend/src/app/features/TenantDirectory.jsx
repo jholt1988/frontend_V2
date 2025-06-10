@@ -10,7 +10,7 @@ export default function TenantDirectory() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      getTenants(query).then(setTenants);
+      getTenants().then(setTenants);
     }, 300);
     return () => clearTimeout(timer);
   }, [query]);
